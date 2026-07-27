@@ -1,0 +1,53 @@
+# Cache
+api_cache/
+__pycache__/
+*.pyc
+*.pkl
+
+# Env
+.env
+
+# Generated analysis files
+analysis_*.json
+backtest_*.json
+daily_selector_report_*.json
+ml_*_report_*.json
+ml_*_cache.pkl
+*.pyc
+
+# Temp scripts
+_*.py
+
+# ML models
+ml_models/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+templates/
+Procfile
+render.yaml
+dashboard_data.js
+
+# Old / unused scripts
+app.py
+backtest*.py
+daily_selector_v7.py
+explore_props.py
+ml_*.py
+parlay_backtest_completo.py
+train_protocol_ml.py
+test_logico.py
+ml_comparativa.py
+ml_value_model.py
+ml_part2.py
+ml_mixed_strategy.py
+ml_6leg_parlay.py
+ml_optimize_3leg.py
+backtest_parlay10.py
+backtest_parlays.py
+backtest_parlays_v68.py
+backtest_props.py
+backtest_protocol_v26.py
+backtest_dual_parlay.py

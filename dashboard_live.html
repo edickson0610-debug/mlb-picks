@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLB Protocolo V2.6 - Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;padding:20px;max-width:1400px;margin:0 auto}
+h1{font-size:24px;margin-bottom:4px;display:flex;align-items:center;gap:12px}
+h1 small{font-size:13px;color:#8b949e;font-weight:400}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.credits{background:#161b22;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid #30363d}
+.tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid #30363d}
+.tab{padding:10px 20px;cursor:pointer;border:none;background:transparent;color:#8b949e;font-size:14px;border-bottom:2px solid transparent;transition:all .2s}
+.tab:hover{color:#e6edf3}
+.tab.active{color:#58a6ff;border-bottom-color:#58a6ff}
+.tab .badge{background:#1f6feb;color:#fff;border-radius:10px;padding:1px 8px;font-size:11px;margin-left:6px}
+.game-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin-bottom:12px}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.game-title{font-size:16px;font-weight:600}
+.game-meta{font-size:12px;color:#8b949e}
+.score-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600}
+.score-low{background:#21262d;color:#8b949e}
+.score-medium{background:#3d2e00;color:#d29922}
+.score-high{background:#002d1e;color:#3fb950}
+.sweet-spot{background:#1f6feb;color:#fff}
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;margin-top:8px}
+.prop-card{border:1px solid #30363d;border-radius:6px;padding:10px;position:relative}
+.prop-card.strong{background:#0d2818;border-color:#3fb950}
+.prop-card.bet{background:#0d2818;border-color:#238636}
+.prop-card.pass{background:#161b22;border-color:#30363d}
+.prop-pitcher{font-weight:600;font-size:14px}
+.prop-side{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:6px}
+.side-over{background:#1f6feb;color:#fff}
+.side-under{background:#9e6a03;color:#fff}
+.prop-meta{font-size:12px;color:#8b949e;margin-top:4px}
+.proj-line{background:#0d1117;border-radius:4px;padding:4px 8px;margin:4px 0;display:flex;justify-content:space-between}
+.ev-positive{color:#3fb950}
+.ev-negative{color:#f85149}
+.save-btn{padding:4px 10px;border-radius:4px;border:1px solid #30363d;background:transparent;color:#8b949e;cursor:pointer;font-size:11px;margin-top:4px}
+.save-btn:hover{background:#21262d;color:#e6edf3}
+.save-btn.saved{background:#1f6feb;color:#fff;border-color:#1f6feb}
+.picks-container{margin-top:12px;display:none}
+.picks-container.show{display:block}
+.pick-card{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:8px}
+.pick-result{display:inline-block;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:600;margin-left:8px;cursor:pointer}
+.result-pending{background:#3d2e00;color:#d29922}
+.result-win{background:#002d1e;color:#3fb950}
+.result-loss{background:#3d0010;color:#f85149}
+.parley-builder{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px;margin-top:16px}
+.parley-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #21262d;font-size:13px}
+.parley-item:last-child{border-bottom:none}
+.parley-odds{font-weight:600;color:#58a6ff}
+.parley-total{font-size:18px;font-weight:700;margin:10px 0;color:#58a6ff}
+.empty{color:#8b949e;text-align:center;padding:40px;font-size:14px}
+.btn{padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600}
+.btn-primary{background:#238636;color:#fff}
+.btn-primary:hover{background:#2ea043}
+.btn-danger{background:#da3633;color:#fff}
+.btn-danger:hover{background:#f85149}
+.btn-sm{padding:4px 10px;font-size:11px}
+.mr-2{margin-right:8px}
+.mt-2{margin-top:8px}
+.mb-2{margin-bottom:8px}
+.flex{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gap-4{gap:4px}
+.justify-between{justify-content:space-between}
+.text-center{text-align:center}
+.text-muted{color:#8b949e;font-size:12px}
+.w-full{width:100%}
+input[type=file]{display:none}
+.file-label{padding:8px 16px;border:1px dashed #30363d;border-radius:6px;cursor:pointer;color:#8b949e;font-size:13px;display:inline-block}
+.file-label:hover{border-color:#58a6ff;color:#58a6ff}
+.approved-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;background:#238636;color:#fff;margin-right:6px}
+.approved-strong-badge{background:#3fb950;color:#0d1117}
+.parley-sidebar{position:fixed;top:0;right:0;width:320px;height:100vh;background:#161b22;border-left:1px solid #30363d;padding:16px;z-index:1000;overflow-y:auto;box-shadow:-4px 0 15px rgba(0,0,0,.5);transform:translateX(0);transition:transform .3s}
+.parley-sidebar.collapsed{transform:translateX(280px)}
+.parley-toggle{position:fixed;top:20px;right:0;z-index:1001;background:#1f6feb;color:#fff;border:none;padding:8px 12px;border-radius:6px 0 0 6px;cursor:pointer;font-size:13px;font-weight:600;transition:right .3s}
+.parley-toggle.collapsed{right:280px}
+.parley-sidebar h3{font-size:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.parley-sidebar .leg-count{background:#1f6feb;color:#fff;border-radius:10px;padding:1px 8px;font-size:11px}
+.parley-float-btn{padding:3px 8px;border-radius:4px;border:1px solid #30363d;background:transparent;color:#8b949e;cursor:pointer;font-size:10px;margin-left:4px}
+.parley-float-btn:hover{background:#21262d;color:#e6edf3}
+.parley-float-btn.active{background:#1f6feb;color:#fff;border-color:#1f6feb}
+@media(max-width:900px){.parley-sidebar{width:100vw;transform:translateX(0)}.parley-sidebar.collapsed{transform:translateX(100vw)}.parley-toggle.collapsed{right:0}}
+.histogram-bar{display:inline-block;height:8px;border-radius:4px;margin-right:2px}
+.stats-row{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.stat-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 20px;flex:1;min-width:120px;text-align:center}
+.stat-value{font-size:22px;font-weight:700}
+.stat-label{font-size:11px;color:#8b949e;margin-top:2px}
+</style>
+</head>
+<body>
+
+<button class="parley-toggle" id="parley-toggle" onclick="toggleParleySidebar()">Parley &gt;</button>
+
+<div class="parley-sidebar" id="parley-sidebar">
+  <h3>Parley <span class="leg-count" id="parley-leg-count">0</span></h3>
+  <div id="parley-sidebar-items">
+    <div class="text-muted" style="font-size:12px;text-align:center;padding:20px 0">Agrega edges al parley desde los juegos</div>
+  </div>
+  <div id="parley-sidebar-total" class="parley-total text-center" style="font-size:16px"></div>
+  <div class="flex text-center mt-2" style="gap:6px">
+    <button class="btn btn-primary btn-sm" onclick="saveParleyFromSidebar()" style="flex:1">Guardar Parley</button>
+    <button class="btn btn-sm" onclick="clearParleySidebar()" style="color:#8b949e;background:transparent;border:1px solid #30363d">Limpiar</button>
+  </div>
+</div>
+
+<div class="header">
+  <div>
+    <h1>MLB Protocolo V2.6 <small id="subtitle">Score System 7 Componentes</small></h1>
+    <div id="last-update" class="text-muted mt-2"></div>
+  </div>
+  <div class="flex">
+    <span class="credits" id="credits-display">Odds API: --</span>
+    <label class="file-label" for="json-upload" style="display:none">+ Cargar JSON</label>
+    <input type="file" id="json-upload" accept=".json">
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-tab="games">Juegos <span class="badge" id="game-count">0</span></div>
+  <div class="tab" data-tab="edges">Edges <span class="badge" id="edge-count">0</span></div>
+  <div class="tab" data-tab="parleys">Parleys <span class="badge" id="parley-count">0</span></div>
+  <div class="tab" data-tab="picks">Mis Picks <span class="badge" id="pick-count">0</span></div>
+</div>
+
+<!-- GAMES TAB -->
+<div id="tab-games" class="tab-content">
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="stat-value" id="stat-games">0</div><div class="stat-label">Juegos</div></div>
+    <div class="stat-card"><div class="stat-value" id="stat-edges">0</div><div class="stat-label">Edges</div></div>
+    <div class="stat-card"><div class="stat-value" id="stat-signals">0</div><div class="stat-label">Senales</div></div>
+    <div class="stat-card"><div class="stat-value" id="stat-avg-score">--</div><div class="stat-label">Score Prom.</div></div>
+  </div>
+  <div id="games-container"></div>
+</div>
+
+<!-- EDGES TAB -->
+<div id="tab-edges" class="tab-content" style="display:none">
+  <div id="edges-container"></div>
+</div>
+
+<!-- PARLEYS TAB -->
+<div id="tab-parleys" class="tab-content" style="display:none">
+  <div id="parleys-container"></div>
+</div>
+
+<!-- PICKS TAB -->
+<div id="tab-picks" class="tab-content" style="display:none">
+  <div class="stats-row" id="picks-stats">
+    <div class="stat-card"><div class="stat-value" id="picks-total">0</div><div class="stat-label">Total Picks</div></div>
+    <div class="stat-card"><div class="stat-value" id="picks-wins">0</div><div class="stat-label">Ganadas</div></div>
+    <div class="stat-card"><div class="stat-value" id="picks-losses">0</div><div class="stat-label">Perdidas</div></div>
+    <div class="stat-card"><div class="stat-value" id="picks-pending">0</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat-card"><div class="stat-value" id="picks-wr">--</div><div class="stat-label">Win Rate</div></div>
+  </div>
+  <div class="flex mb-2">
+    <button class="btn btn-danger btn-sm" onclick="clearPicks()">Limpiar historial</button>
+    <button class="btn btn-primary btn-sm" onclick="exportPicks()">Exportar JSON</button>
+  </div>
+  <div id="picks-container"></div>
+
+  <!-- PARLEY BUILDER -->
+  <div class="parley-builder" id="parley-builder">
+    <h3 style="margin-bottom:8px;font-size:15px">Armar Parley</h3>
+    <p class="text-muted">Selecciona picks de la pestana Mis Picks para armar un parley</p>
+    <div id="parley-items"></div>
+    <div id="parley-total" class="parley-total text-center"></div>
+    <div class="flex text-center mt-2">
+      <button class="btn btn-primary" onclick="saveParley()">Guardar Parley</button>
+      <button class="btn btn-sm" onclick="clearParley()" style="color:#8b949e;background:transparent;border:1px solid #30363d">Limpiar</button>
+    </div>
+  </div>
+</div>
+
+<div id="empty-state" class="empty">
+  <p style="font-size:18px;margin-bottom:8px">No hay datos cargados</p>
+  <p>Ejecuta <code>python -m src.main</code> en el proyecto y luego carga el JSON aqui, o usa el boton "Cargar JSON" arriba.</p>
+</div>
+
+<script src="dashboard_data.js"></script>
+<script>
+// ================================================================
+// STATE
+// ================================================================
+let data = __EMBEDDED_DATA__;
+// (loaded from dashboard_data.js)
+let picks = [];
+let parleySelected = [];
+try { picks = JSON.parse(localStorage.getItem('mlb_picks') || '[]'); } catch(e) { picks = []; }
+try { parleySelected = JSON.parse(localStorage.getItem('mlb_parley') || '[]'); } catch(e) { parleySelected = []; }
+
+// ================================================================
+// PERSISTENCIA
+// ================================================================
+function savePicks() {
+  try { localStorage.setItem('mlb_picks', JSON.stringify(picks)); } catch(e) {}
+  updatePickUI();
+}
+function saveParleySelected() {
+  try { localStorage.setItem('mlb_parley', JSON.stringify(parleySelected)); } catch(e) {}
+}
+
+// ================================================================
+// TABS
+// ================================================================
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.style.display = 'none');
+    t.classList.add('active');
+    document.getElementById('tab-' + t.dataset.tab).style.display = 'block';
+  });
+});
+
+// ================================================================
+// FILE UPLOAD
+// ================================================================
+document.getElementById('json-upload').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      data = JSON.parse(ev.target.result);
+      render();
+    } catch(err) {
+      alert('Error parsing JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+// ================================================================
+// LOAD DEFAULT (from on-page data if available)
+// ================================================================
+// Usually the JSON is loaded manually. But we also try to fetch
+// the latest analysis file from the directory listing (dev only).
+// For now, just show empty state.
+
+// ================================================================
+// RENDER
+// ================================================================
+function render() {
+  console.log('render() called, data=', typeof data, data ? 'has ' + (data.results ? data.results.length : 0) + ' results' : 'null');
+  if (!data) {
+    document.getElementById('empty-state').style.display = 'block';
+    document.querySelectorAll('.tab-content').forEach(x => x.style.display = 'none');
+    document.getElementById('tabs').style.display = 'none';
+    document.getElementById('stats-row').style.display = 'none';
+    return;
+  }
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('tabs').style.display = 'flex';
+  document.getElementById('stats-row').style.display = 'flex';
+  document.getElementById('tab-games').style.display = 'block';
+
+  const results = data.results || [];
+  const ts = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'desconocido';
+  document.getElementById('last-update').textContent = 'Actualizado: ' + ts;
+  document.getElementById('subtitle').textContent = data.protocol || 'Score System 7 Componentes';
+
+  // Stats
+  let gameCount = results.length;
+  let edgeCount = 0;
+  let signalCount = 0;
+  let totalScore = 0;
+  let scoredGames = 0;
+
+  results.forEach(r => {
+    const pp = r.markets?.player_props || {};
+    const edges = pp.market_edges || [];
+    const players = pp.players || [];
+    edgeCount += edges.length;
+    signalCount += players.length;
+    if (r.score !== undefined && r.score !== null) {
+      totalScore += r.score;
+      scoredGames++;
+    }
+  });
+
+  document.getElementById('stat-games').textContent = gameCount;
+  document.getElementById('stat-edges').textContent = edgeCount;
+  document.getElementById('stat-signals').textContent = signalCount;
+  document.getElementById('stat-avg-score').textContent = scoredGames ? (totalScore/scoredGames).toFixed(2) : '--';
+  document.getElementById('game-count').textContent = gameCount;
+  document.getElementById('edge-count').textContent = edgeCount;
+
+  // Credits
+  const credits = document.getElementById('credits-display');
+  if (data.odds_remaining !== undefined) {
+    credits.textContent = 'Odds API: ' + data.odds_remaining + ' req';
+  }
+
+  renderGames(results);
+  renderEdges(results);
+  renderParleys(results);
+  updatePickUI();
+  updateParleySidebar();
+}
+
+function getScoreClass(score) {
+  if (!score || score < 0.70) return 'score-low';
+  if (score < 0.80) return 'score-medium';
+  return 'score-high';
+}
+
+function getScoreLabel(score) {
+  if (!score || score < 0.70) return score !== null && score !== undefined ? score.toFixed(2) : 'N/A';
+  if (score <= 0.84) return score.toFixed(2) + ' [SWEET SPOT]';
+  return score.toFixed(2) + ' [REVISAR]';
+}
+
+// ================================================================
+// GAMES
+// ================================================================
+function renderGames(results) {
+  const container = document.getElementById('games-container');
+  container.innerHTML = '';
+
+  if (!results || !results.length) {
+    container.innerHTML = '<div class="empty" style="text-align:center;padding:40px 20px">' +
+      '<p style="font-size:18px;margin-bottom:8px">No hay juegos en Pre-Game ahora</p>' +
+      '<p class="text-muted">Vuelve mas tarde cuando haya juegos disponibles o corre el script cuando haya juegos en vivo.</p>' +
+      '</div>';
+    return;
+  }
+
+  results.forEach(function(r) {
+    if (r.partial) {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.innerHTML = '<div class="game-header"><div class="game-title">' + (r.game || 'Juego') + '</div>' +
+        '<span class="score-badge score-low">INCOMPLETO</span></div>' +
+        '<div class="text-muted">' + (r.error || 'Datos insuficientes') + '</div>';
+      container.appendChild(card);
+      return;
+    }
+
+    const g = r.phases && r.phases.calendar && r.phases.calendar.game || r.game || 'Juego';
+    const venue = r.phases && r.phases.venue || '';
+    const score = r.score;
+    const sweet = r.sweet_spot;
+    const pp = r.markets && r.markets.player_props || {};
+    const edges = pp.market_edges || [];
+    const signals = pp.players || [];
+
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    const scoreCls = sweet ? 'sweet-spot' : getScoreClass(score);
+    const scoreLbl = getScoreLabel(score);
+
+    const duelo = r.metrics && r.metrics.duelo_abridores || {};
+    var pitStr = '';
+    if (duelo.away && duelo.home) {
+      pitStr = duelo.away + ' (' + (duelo.away_k9 || '?') + ' K/9) vs ' + duelo.home + ' (' + (duelo.home_k9 || '?') + ' K/9)';
+    }
+
+    const clima = r.metrics && r.metrics.clima || {};
+    const weatherStr = clima.temp ? clima.temp + 'C, wind ' + clima.wind + 'mph' : '';
+
+    const comps = r.score_components || {};
+    let compBars = '';
+
+    function addComp(label, val) {
+      if (val === undefined) return;
+      const pct = Math.round(val * 100);
+      var barCls = '#f85149';
+      if (val >= 0.80) barCls = '#3fb950';
+      else if (val >= 0.60) barCls = '#d29922';
+      compBars += '<div style="margin:2px 0;font-size:11px">' +
+        '<span style="display:inline-block;width:70px;color:#8b949e">' + label + '</span>' +
+        '<span style="display:inline-block;width:30px;text-align:right;margin-right:6px">' + (val*100).toFixed(0) + '</span>' +
+        '<span style="display:inline-block;width:120px;height:8px;background:#21262d;border-radius:4px;vertical-align:middle">' +
+        '<span style="display:block;height:8px;width:' + pct + '%;background:' + barCls + ';border-radius:4px"></span>' +
+        '</span></div>';
+    }
+    addComp('Duelo', comps.duelo_abridores_score);
+    addComp('Ofensa', comps.ofensiva_score);
+    addComp('Bullpen', comps.bullpen_score);
+    addComp('Parque', comps.factor_parque_score);
+    addComp('Clima', comps.clima_score);
+    addComp('Umpire', comps.umpire_score);
+    addComp('Run Exp.', comps.run_expectancy_score);
+
+    // Helper to make pick/parley buttons
+    function mktButtons(pkey, label, odds, evStr, extraCls) {
+      if (!extraCls) extraCls = '';
+      const isP = isPickedByKey(pkey);
+      const iP = isInParleyByKey(pkey);
+      return '<div style="margin-top:4px">' +
+        '<button class="save-btn' + (isP ? ' saved' : '') + ' ' + extraCls + '" onclick="togglePick(\'' + pkey + '\')">' + (isP ? 'Guardado' : 'Guardar Pick') + '</button>' +
+        '<button class="parley-float-btn' + (iP ? ' active' : '') + ' ' + extraCls + '" onclick="toggleParleyFromEdge(\'' + pkey + '\')">' + (iP ? 'En Parley' : '+ Parley') + '</button>' +
+        '</div>';
+    }
+
+    function mktCard(label, details, extra) {
+      return '<div style="border:1px solid #30363d;border-radius:6px;padding:8px;background:#161b22;margin-bottom:4px">' +
+        '<div style="font-weight:600;font-size:13px">' + label + '</div>' +
+        '<div style="font-size:12px;color:#8b949e;margin-top:2px">' + details + '</div>' +
+        (extra || '') + '</div>';
+    }
+
+    let marketsHtml = '';
+
+    // ============ ALL MARKETS AS PICKABLE CARDS ============
+
+    // 1. Edges (pitcher strikeout props vs odds)
+    if (edges.length) {
+      var gSafe = g.replace(/'/g, "\\'");
+      marketsHtml += '<div class="text-muted" style="font-size:12px;margin:8px 0 4px;display:flex;justify-content:space-between;align-items:center">' +
+        '<span><span class="approved-badge">APROBADO</span> Edges Ks vs Mercado:</span>' +
+        '<button class="save-btn" onclick="addAllEdgesToParley(\'' + gSafe + '\')" style="font-size:10px">+ Todas al Parley</button></div>';
+      edges.forEach(function(e) {
+        const sideCls = e.side === 'Over' ? 'side-over' : 'side-under';
+        const cls = e.rec === 'STRONG BET' ? ' prop-card strong' : ' prop-card bet';
+        const recBadge = e.rec === 'STRONG BET' ? '<span class="approved-badge approved-strong-badge">STRONG</span>' : '<span class="approved-badge">BET</span>';
+        const pkey = 'edge|' + g + '|' + e.pitcher + ' ' + e.side + ' ' + e.line + 'K|' + e.odds + '|' + e.ev_pct + '|' + e.edge_pct + '|' + (e.bookmaker || '');
+        marketsHtml += '<div class="prop-card ' + cls + '" style="margin-bottom:4px">' +
+          '<div><span class="prop-side ' + sideCls + '">' + e.side + '</span><span class="prop-pitcher">' + e.pitcher + '</span>' +
+          ' ' + recBadge +
+          '<span style="float:right;font-size:11px;color:' + (e.ev_pct>0?'#3fb950':'#f85149') + '">EV ' + e.ev_pct + '% | Edge ' + e.edge_pct + 'pp</span></div>' +
+          '<div class="prop-meta">Ks O/U ' + e.line + ' @ ' + e.odds + ' (' + e.bookmaker + ') | Proj ' + e.our_proj + 'K</div>' +
+          mktButtons(pkey, e.pitcher, e.odds, e.ev_pct + '%') +
+          '</div>';
+      });
+    }
+
+    // 2. Money Line
+    const ml = r.markets && r.markets.money_line || {};
+    if (ml.decision) {
+      var mlWin = ml.win_pct ? (ml.win_pct*100).toFixed(1) + '%' : '?';
+      var mlLabel = g.replace(/ @ .*$/, '');
+      if (ml.fair_odds && ml.fair_odds > 0) mlLabel = g.replace(/^.* @ /, '');
+      var mlEv = ml.ev || '?';
+      var mlOdds = ml.fair_odds || '?';
+      var mlEvNum = parseFloat(mlEv) || 0;
+      var mlOddsNum = parseInt(mlOdds) || 0;
+      var mlPkey = 'ml|' + g + '|' + mlLabel + ' ML|' + mlOdds + '|' + mlEvNum + '|0|';
+      marketsHtml += mktCard(
+        'Money Line: ' + mlLabel,
+        'EV ' + mlEv + ' | Win% ' + mlWin + ' | Score ' + (ml.score ? ml.score.toFixed(2) : '?'),
+        mktButtons(mlPkey, mlLabel + ' ML', mlOdds, mlEv)
+      );
+    }
+
+    // 3. Run Line +1.5
+    const rl = r.markets && r.markets.runline_plus_1_5 || {};
+    if (rl.decision) {
+      var rlLabel = g.replace(/ @ .*$/, '');
+      if (rl.ev && parseInt(rl.ev) < 0) rlLabel = g.replace(/^.* @ /, '');
+      var rlEv = rl.ev || '?';
+      var rlEvNum = parseFloat(rlEv) || 0;
+      var rlPkey = 'rl|' + g + '|' + rlLabel + ' +1.5|-135|' + rlEvNum + '|' + (rl.score ? rl.score.toFixed(2) : '0') + '|';
+      marketsHtml += mktCard(
+        'Run Line +1.5: ' + rlLabel,
+        'EV ' + rlEv + ' | Score ' + (rl.score ? rl.score.toFixed(2) : '?'),
+        mktButtons(rlPkey, rlLabel + ' +1.5', 'EV ' + rlEv, rlEv)
+      );
+    }
+
+    // 4. Totals
+    const over = r.markets && r.markets.total_over || {};
+    const under = r.markets && r.markets.total_under || {};
+    if (over.decision) {
+      var oEv = over.ev || '?';
+      var oEvNum = parseFloat(oEv) || 0;
+      var oPkey = 'total|' + g + '|Over ' + (over.line || '?') + '|-110|' + oEvNum + '|' + (over.projection || '?') + '|';
+      marketsHtml += mktCard(
+        'Total Over ' + (over.line || '?'),
+        'Proj ' + (over.projection || '?') + ' | EV ' + over.ev + ' | Score ' + (over.score ? over.score.toFixed(2) : '?'),
+        mktButtons(oPkey, 'Over ' + (over.line || '?'), oEv, oEv)
+      );
+    }
+    if (under.decision) {
+      var uEv = under.ev || '?';
+      var uEvNum = parseFloat(uEv) || 0;
+      var uPkey = 'total|' + g + '|Under ' + (under.line || '?') + '|-110|' + uEvNum + '|' + (under.projection || '?') + '|';
+      marketsHtml += mktCard(
+        'Total Under ' + (under.line || '?'),
+        'Proj ' + (under.projection || '?') + ' | EV ' + under.ev + ' | Score ' + (under.score ? under.score.toFixed(2) : '?'),
+        mktButtons(uPkey, 'Under ' + (under.line || '?'), uEv, uEv)
+      );
+    }
+
+    // 5. HR Directas
+    const hr = r.markets && r.markets.hr_directas || {};
+    if (hr.players && hr.players.length) {
+      hr.players.forEach(function(p) {
+        var hrPkey = 'hr|' + g + '|' + p.player + ' HR|' + (p.ev || '?') + '|0|0|';
+        marketsHtml += mktCard(
+          'HR: ' + p.player,
+          'EV ' + (p.ev || '?'),
+          mktButtons(hrPkey, p.player + ' HR', p.ev || '?', '')
+        );
+      });
+    }
+
+    // 6. Senales (batter props)
+    if (signals.length) {
+      marketsHtml += '<div class="text-muted" style="font-size:12px;margin:8px 0 4px">Senales de bateo:</div>';
+      signals.forEach(function(p) {
+        var sigLabel = p.batter + ' ' + p.market;
+        var sigDetail = p.signal;
+        if (p.proj_k) sigDetail += ' | Proj K: ' + p.proj_k.toFixed(2);
+        if (p.proj_hits) sigDetail += ' | Proj H: ' + p.proj_hits.toFixed(2);
+        if (p.h2h_avg) sigDetail += ' | H2H: ' + p.h2h_avg.toFixed(3);
+        var sigPkey = 'sig|' + g + '|' + sigLabel + '|0|0|0|';
+        marketsHtml += mktCard(sigLabel, sigDetail, mktButtons(sigPkey, sigLabel, '', ''));
+      });
+    }
+
+    card.innerHTML =
+      '<div class="game-header">' +
+        '<div style="flex:1">' +
+          '<div class="game-title">' + g + '</div>' +
+          '<div class="game-meta">' + venue + (weatherStr ? ' | ' + weatherStr : '') + '</div>' +
+          '<div class="game-meta" style="margin-top:2px">' + pitStr + '</div>' +
+        '</div>' +
+        '<div class="flex gap-4">' +
+          '<span class="score-badge ' + scoreCls + '">' + scoreLbl + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px">' +
+        '<div style="flex:1;min-width:200px">' +
+          '<div class="text-muted" style="font-size:12px;margin-bottom:4px">Componentes del Score:</div>' +
+          compBars +
+        '</div>' +
+        '<div style="flex:2;min-width:300px">' +
+          marketsHtml +
+        '</div>' +
+      '</div>';
+
+    container.appendChild(card);
+  });
+}
+
+// ================================================================
+// EDGES TAB
+// ================================================================
+function renderEdges(results) {
+  const container = document.getElementById('edges-container');
+  container.innerHTML = '';
+
+  let allEdges = [];
+  results.forEach(function(r) {
+    var g = r.phases && r.phases.calendar && r.phases.calendar.game || r.game || 'Juego';
+    var m = r.markets || {};
+
+    // Player props edges (from The Odds API)
+    var pp = m.player_props || {};
+    var edges = pp.market_edges || [];
+    edges.forEach(function(e) {
+      allEdges.push(e);
+      e._game = g;
+      e._type = 'player_prop';
+    });
+
+    // Senales (batter props from MLB API - H2H + season stats)
+    var signals = pp.players || [];
+    signals.forEach(function(p) {
+      allEdges.push({
+        _game: g,
+        _type: 'senal',
+        'label': p.batter + ' ' + (p.market || 'K Over 0.5'),
+        'ev_pct': 0,
+        'edge_pct': 0,
+        'rec': 'SENAL',
+        'line': p.market || 'K Over 0.5',
+        'odds': 0,
+        'signal': p.signal || '',
+        'proj_k': p.proj_k || 0,
+        'proj_hits': p.proj_hits || 0,
+        'h2h_avg': p.h2h_avg || 0,
+        'k_pct': p.k_pct || 0,
+        'pitcher_k9': p.pitcher_k9 || 0,
+        'score': 0,
+      });
+    });
+
+    // RL +1.5
+    var rl = m.runline_plus_1_5 || {};
+    if (rl.decision === 'APROBADO') {
+      var rlEv = parseFloat(rl.ev) || 0;
+      var rlScore = rl.score || 0;
+      var rlLabel = g.replace(/ @ .*$/, '');
+      if (rlEv < 0) rlLabel = g.replace(/^.* @ /, '');
+      allEdges.push({
+        _game: g,
+        _type: 'rl',
+        'label': rlLabel + ' RL +1.5',
+        'ev_pct': rlEv,
+        'edge_pct': rlEv,
+        'rec': rlEv >= 8 ? 'STRONG BET' : (rlEv >= 5 ? 'BET' : 'WEAK'),
+        'line': '+1.5',
+        'odds': '-135',
+        'score': rlScore,
+      });
+    }
+
+    // Totals
+    ['total_over', 'total_under'].forEach(function(mkt) {
+      var t = m[mkt] || {};
+      if (t.decision === 'APROBADO') {
+        var tEv = parseFloat(t.ev) || 0;
+        var side = mkt === 'total_over' ? 'Over' : 'Under';
+        allEdges.push({
+          _game: g,
+          _type: 'total',
+          'label': side + ' ' + (t.line || '?'),
+          'ev_pct': tEv,
+          'edge_pct': tEv,
+          'rec': tEv >= 8 ? 'STRONG BET' : (tEv >= 5 ? 'BET' : 'WEAK'),
+          'line': t.line || '?',
+          'odds': '-110',
+          'score': t.score || 0,
+        });
+      }
+    });
+
+    // ML underdog
+    var ml = m.money_line || {};
+    if (ml.decision === 'APROBADO') {
+      var mlEv = parseFloat(ml.ev) || 0;
+      var mlFair = ml.fair_odds || 0;
+      if (mlFair > 150 && mlEv > 0) {
+        var mlLabel = g.replace(/ @ .*$/, '');
+        if (mlFair > 0) mlLabel = g.replace(/^.* @ /, '');
+        allEdges.push({
+          _game: g,
+          _type: 'ml',
+          'label': mlLabel + ' ML',
+          'ev_pct': mlEv,
+          'edge_pct': mlEv,
+          'rec': mlEv >= 8 ? 'STRONG BET' : (mlEv >= 5 ? 'BET' : 'WEAK'),
+          'line': 'ML',
+          'odds': mlFair,
+          'score': ml.score || 0,
+        });
+      }
+    }
+  });
+
+  if (!allEdges.length) {
+    container.innerHTML = '<div class="empty">No se encontraron edges aprobados en este archivo.</div>';
+    return;
+  }
+
+  allEdges.sort(function(a, b) {
+    var order = { 'STRONG BET': 0, 'BET': 1, 'SENAL': 2, 'NO BET': 3, 'WEAK': 4, 'PASS': 5 };
+    return (order[a.rec] || 99) - (order[b.rec] || 99);
+  });
+
+  const grid = document.createElement('div');
+  grid.className = 'prop-grid';
+  allEdges.forEach(function(e) {
+    var cls = e.rec === 'STRONG BET' ? 'strong' : (e.rec === 'SENAL' ? 'pass' : 'bet');
+    var typeBadge = '';
+    if (e._type === 'rl') typeBadge = '<span class="approved-badge" style="background:#d29922;font-size:10px">RL</span> ';
+    else if (e._type === 'total') typeBadge = '<span class="approved-badge" style="background:#58a6ff;font-size:10px">TOTAL</span> ';
+    else if (e._type === 'ml') typeBadge = '<span class="approved-badge" style="background:#bc8cff;font-size:10px">ML</span> ';
+    else if (e._type === 'senal') typeBadge = '<span class="approved-badge" style="background:#f0883e;font-size:10px">SENAL</span> ';
+    else typeBadge = '<span class="approved-badge" style="font-size:10px">PROP</span> ';
+
+    var evCls = e.ev_pct > 0 ? 'ev-positive' : 'ev-negative';
+    var pkey = e._type + '|' + (e._game || '') + '|' + e.label + '|' + (e.odds || 0) + '|' + (e.ev_pct || 0) + '|' + (e.edge_pct || 0) + '|';
+    if (e._type === 'player_prop') {
+      pkey = 'edge|' + (e._game || '') + '|' + e.pitcher + ' ' + e.side + ' ' + e.line + 'K|' + e.odds + '|' + e.ev_pct + '|' + e.edge_pct + '|' + (e.bookmaker || '');
+    } else if (e._type === 'senal') {
+      pkey = 'sig|' + (e._game || '') + '|' + e.label + '|0|0|0|';
+    }
+    var isP = isPickedByKey(pkey);
+    var iP = isInParleyByKey(pkey);
+    var metaStr = '';
+    var projStr = '';
+    if (e._type === 'player_prop') {
+      metaStr = 'Linea ' + e.line + ' @ ' + e.odds + ' (' + e.bookmaker + ')';
+      projStr = '<span>Proj: ' + e.our_proj + 'K</span> ';
+    } else if (e._type === 'senal') {
+      var dets = [];
+      if (e.signal) dets.push(e.signal);
+      if (e.proj_k) dets.push('Proj K: ' + e.proj_k.toFixed(2));
+      if (e.proj_hits) dets.push('Proj H: ' + e.proj_hits.toFixed(2));
+      if (e.h2h_avg) dets.push('H2H: ' + e.h2h_avg.toFixed(3));
+      if (e.k_pct) dets.push('K%: ' + e.k_pct.toFixed(1) + '%');
+      if (e.pitcher_k9) dets.push('P K/9: ' + e.pitcher_k9.toFixed(1));
+      metaStr = dets.join(' | ');
+    } else {
+      metaStr = 'Linea ' + e.line + ' @ ' + e.odds;
+    }
+    grid.innerHTML +=
+      '<div class="prop-card ' + cls + '">' +
+        '<div class="game-meta" style="margin-bottom:4px">' + (e._game || '') + '</div>' +
+        '<div>' + typeBadge + '<span class="prop-pitcher">' + e.label + '</span></div>' +
+        '<div class="prop-meta">' + metaStr + '</div>' +
+        '<div class="proj-line">' +
+          projStr +
+          '<span class="' + evCls + '">EV ' + e.ev_pct + '% | Edge ' + e.edge_pct + 'pp</span>' +
+        '</div>' +
+        '<div style="font-size:11px;color:#8b949e;margin-top:4px">' + e.rec + '</div>' +
+        '<div style="margin-top:4px">' +
+          '<button class="save-btn' + (isP ? ' saved' : '') + '" onclick="togglePick(\'' + pkey + '\')">' + (isP ? 'Guardado' : 'Guardar Pick') + '</button>' +
+          '<button class="parley-float-btn' + (iP ? ' active' : '') + '" onclick="toggleParleyFromEdge(\'' + pkey + '\')">' + (iP ? 'En Parley' : '+ Parley') + '</button>' +
+        '</div>' +
+      '</div>';
+  });
+  container.appendChild(grid);
+}
+
+// ================================================================
+// PARLEYS TAB (auto-generated)
+// ================================================================
+function renderParleys(results) {
+  var container = document.getElementById('parleys-container');
+  container.innerHTML = '';
+
+  var autoParleys = data && data.auto_parleys || [];
+  document.getElementById('parley-count').textContent = autoParleys.length;
+
+  if (!autoParleys.length) {
+    container.innerHTML = '<div class="empty">No hay suficientes picks de calidad para generar parleys. Se necesitan al menos 2 edges con EV positivo.</div>';
+    return;
+  }
+
+  autoParleys.forEach(function(ap) {
+    var starsHtml = '';
+    for (var si = 0; si < 5; si++) {
+      starsHtml += si < ap.stars ? '<span style="color:#d29922;font-size:16px">★</span>' : '<span style="color:#30363d;font-size:16px">☆</span>';
+    }
+
+    var cls = ap.ev_pct >= 20 ? 'prop-card strong' : (ap.ev_pct >= 10 ? 'prop-card bet' : 'prop-card pass');
+
+    var legsHtml = '<table style="width:100%;font-size:12px;margin-top:6px;border-collapse:collapse">' +
+      '<tr style="color:#8b949e;border-bottom:1px solid #21262d"><td style="padding:4px 8px">Leg</td><td style="padding:4px 8px">Juego</td><td style="padding:4px 8px">Cuota</td><td style="padding:4px 8px">EV</td></tr>';
+
+    ap.legs.forEach(function(leg) {
+      var evCls = leg.ev_pct > 0 ? 'ev-positive' : 'ev-negative';
+      var gameShort = leg.game.length > 30 ? leg.game.substring(0, 28) + '..' : leg.game;
+      legsHtml += '<tr style="border-bottom:1px solid #21262d">' +
+        '<td style="padding:4px 8px">' + leg.label + '</td>' +
+        '<td style="padding:4px 8px;color:#8b949e">' + gameShort + '</td>' +
+        '<td style="padding:4px 8px">' + leg.odds + '</td>' +
+        '<td style="padding:4px 8px" class="' + evCls + '">' + leg.ev_pct + '%</td></tr>';
+    });
+    legsHtml += '</table>';
+
+    var parleyCard = document.createElement('div');
+    parleyCard.className = 'game-card';
+    parleyCard.innerHTML =
+      '<div class="game-header">' +
+        '<div>' +
+          '<div class="game-title">' + ap.label + ' <span style="font-size:14px;color:#8b949e;font-weight:400">(' + ap.n + ' legs)</span></div>' +
+          '<div style="margin-top:2px">' + starsHtml + '</div>' +
+        '</div>' +
+        '<div style="text-align:right">' +
+          '<div style="font-size:18px;font-weight:700;color:#58a6ff">' + ap.odds + '</div>' +
+          '<div class="' + (ap.ev_pct > 0 ? 'ev-positive' : 'ev-negative') + '" style="font-size:12px">EV ' + ap.ev_pct + '%</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:8px">' + legsHtml + '</div>' +
+      '<div style="margin-top:8px">' +
+        '<button class="btn btn-primary btn-sm" onclick="saveAutoParley(' + autoParleys.indexOf(ap) + ')" style="margin-right:6px">Guardar Parley</button>' +
+        '<span class="text-muted" style="font-size:11px">Cuota combinada: ' + ap.odds + ' (x' + ap.odds_decimal + ')</span>' +
+      '</div>';
+
+    container.appendChild(parleyCard);
+  });
+}
+
+function saveAutoParley(idx) {
+  var ap = data.auto_parleys[idx];
+  if (!ap) return;
+
+  var totalDecimal = ap.odds_decimal || 1;
+  var parleyKey = 'parley_auto_' + Date.now();
+  picks.push({
+    key: parleyKey,
+    fullKey: parleyKey,
+    pitcher: ap.label + ' (' + ap.n + ' legs)',
+    side: 'Multi',
+    line: 0,
+    odds: ap.odds,
+    bookmaker: ap.legs.map(function(l) { return l.type; }).filter(function(v,i,a) { return a.indexOf(v)===i; }).join('/'),
+    ev_pct: ap.ev_pct,
+    edge_pct: ap.ev_pct,
+    game: ap.legs.map(function(l) { return l.game; }).filter(function(v,i,a) { return a.indexOf(v)===i; }).join(' | '),
+    result: 'pending',
+    date: new Date().toISOString().split('T')[0],
+    legs: ap.legs.map(function(l) { return Object.assign({}, l); }),
+    is_parley: true,
+    parley_odds: ap.odds,
+    parley_decimal: totalDecimal,
+    mtype: 'auto_parley',
+  });
+  savePicks();
+  render();
+  alert('Parley guardado en Mis Picks! Cuota: ' + ap.odds);
+}
+
+// ================================================================
+// PICKS SYSTEM
+// ================================================================
+function isPickedByKey(pkey) {
+  return picks.some(function(p) { return p.fullKey === pkey; });
+}
+
+function isPicked(e) {
+  if (e && e.pitcher && e.side) {
+    return picks.some(function(p) { return p.fullKey && p.fullKey.indexOf(e.pitcher + '|' + e.side) >= 0; });
+  }
+  return false;
+}
+
+function makePickObj(pkey) {
+  const parts = pkey.split('|');
+  var o = {
+    fullKey: pkey,
+    key: pkey,
+    mtype: parts[0] || 'unk',
+    game: parts[1] || '',
+    label: parts[2] || 'Pick',
+    odds: parseInt(parts[3]) || 0,
+    ev_pct: parseFloat(parts[4]) || 0,
+    edge_pct: parseFloat(parts[5]) || 0,
+    bookmaker: parts[6] || '',
+    result: 'pending',
+    date: new Date().toISOString().split('T')[0],
+    pitcher: parts[2] || 'Pick',
+    side: '',
+    line: 0,
+  };
+  if (o.mtype === 'ml') {
+    o.displayType = 'ML';
+    o.side = 'ML';
+  } else if (o.mtype === 'rl') {
+    o.displayType = 'RL +1.5';
+    o.side = 'RL';
+  } else if (o.mtype === 'total') {
+    o.displayType = 'Total';
+    o.side = o.label.indexOf('Over') >= 0 ? 'Over' : 'Under';
+  } else if (o.mtype === 'edge') {
+    o.displayType = 'Ks';
+    o.side = o.label.indexOf(' Over ') >= 0 ? 'Over' : 'Under';
+    var lp = o.label.split(' ');
+    if (lp.length >= 2) o.pitcher = lp[0] + ' ' + lp[1];
+  } else if (o.mtype === 'hr') {
+    o.displayType = 'HR';
+    o.side = 'HR';
+  } else if (o.mtype === 'sig') {
+    o.displayType = 'Senal';
+    o.side = 'SIG';
+  } else {
+    o.displayType = o.mtype.toUpperCase();
+  }
+  return o;
+}
+
+function togglePick(raw) {
+  const idx = picks.findIndex(function(p) { return p.fullKey === raw; });
+  if (idx >= 0) {
+    picks.splice(idx, 1);
+  } else {
+    picks.push(makePickObj(raw));
+  }
+  savePicks();
+  render();
+}
+
+function updatePickUI() {
+  document.getElementById('pick-count').textContent = picks.length;
+
+  const total = picks.length;
+  const wins = picks.filter(p => p.result === 'win').length;
+  const losses = picks.filter(p => p.result === 'loss').length;
+  const pending = picks.filter(p => p.result === 'pending').length;
+
+  document.getElementById('picks-total').textContent = total;
+  document.getElementById('picks-wins').textContent = wins;
+  document.getElementById('picks-losses').textContent = losses;
+  document.getElementById('picks-pending').textContent = pending;
+  document.getElementById('picks-wr').textContent = (wins + losses) ? (wins / (wins + losses) * 100).toFixed(1) + '%' : '--';
+
+  const container = document.getElementById('picks-container');
+  container.innerHTML = '';
+
+  if (!total) {
+    container.innerHTML = '<div class="empty">No tienes picks guardados. Ve a la pestana Juegos o Edges y haz clic en "Guardar Pick".</div>';
+    return;
+  }
+
+  // Group by date
+  const byDate = {};
+  picks.forEach(p => {
+    const d = p.date || 'sin fecha';
+    if (!byDate[d]) byDate[d] = [];
+    byDate[d].push(p);
+  });
+
+  Object.keys(byDate).sort().reverse().forEach(date => {
+    const dayPicks = byDate[date];
+    const dayWins = dayPicks.filter(p => p.result === 'win').length;
+    const dayLosses = dayPicks.filter(p => p.result === 'loss').length;
+    const dayPend = dayPicks.filter(p => p.result === 'pending').length;
+
+    const section = document.createElement('div');
+    section.innerHTML = `<div style="font-size:14px;font-weight:600;margin:12px 0 6px">${date}
+      <span class="text-muted" style="font-weight:400;font-size:12px">(${dayPicks.length} picks
+      ${dayWins ? '| ' + dayWins + 'W' : ''}${dayLosses ? ' ' + dayLosses + 'L' : ''}${dayPend ? ' ' + dayPend + ' pend' : ''})</span>
+    </div>`;
+
+    dayPicks.forEach(p => {
+      const resCls = 'result-' + p.result;
+      const resLabels = { win: 'Ganada', loss: 'Perdida', pending: 'Pendiente' };
+      const sideCls = p.side === 'Over' ? 'side-over' : 'side-under';
+      const isParleyMember = parleySelected.some(pp => pp.key === p.key);
+
+      const div = document.createElement('div');
+      div.className = 'pick-card';
+      div.innerHTML = `
+        <div class="flex justify-between">
+          <div>
+            <span class="prop-side ${sideCls}">${p.side}</span>
+            <strong>${p.pitcher}</strong>
+            <span class="text-muted">O/U ${p.line} @ ${p.odds}</span>
+            <span class="text-muted">${p.bookmaker}</span>
+            <span class="${p.ev_pct > 0 ? 'ev-positive' : 'ev-negative'}">EV ${p.ev_pct}%</span>
+          </div>
+          <div class="flex gap-4">
+            <span class="pick-result ${resCls}" onclick="cycleResult('${p.key}')">${resLabels[p.result]}</span>
+            <input type="checkbox" ${isParleyMember ? 'checked' : ''} onchange="toggleParleyMember('${p.key}')" title="Agregar a parley">
+          </div>
+        </div>
+        <div class="text-muted" style="font-size:11px;margin-top:4px">${p.game} | Edge ${p.edge_pct}pp</div>
+        <button class="save-btn" onclick="removePick('${p.key}')" style="color:#f85149">Eliminar</button>
+      `;
+      section.appendChild(div);
+    });
+
+    container.appendChild(section);
+  });
+
+  // Update parley builder
+  updateParleyUI();
+}
+
+function cycleResult(key) {
+  const p = picks.find(x => x.key === key);
+  if (!p) return;
+  const states = ['pending', 'win', 'loss'];
+  const idx = states.indexOf(p.result);
+  p.result = states[(idx + 1) % states.length];
+  savePicks();
+}
+
+function removePick(key) {
+  picks = picks.filter(p => p.key !== key);
+  parleySelected = parleySelected.filter(p => p.key !== key);
+  saveParleySelected();
+  savePicks();
+}
+
+function clearPicks() {
+  if (!confirm('Eliminar todos los picks?')) return;
+  picks = [];
+  parleySelected = [];
+  saveParleySelected();
+  savePicks();
+}
+
+function exportPicks() {
+  const blob = new Blob([JSON.stringify(picks, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mlb_picks_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+}
+
+// ================================================================
+// PARLEY SYSTEM
+// ================================================================
+function toggleParleyMember(key) {
+  const idx = parleySelected.findIndex(p => p.key === key);
+  if (idx >= 0) {
+    parleySelected.splice(idx, 1);
+  } else {
+    const p = picks.find(x => x.key === key);
+    if (p) parleySelected.push(p);
+  }
+  saveParleySelected();
+  updateParleyUI();
+}
+
+function updateParleyUI() {
+  const container = document.getElementById('parley-items');
+  container.innerHTML = '';
+
+  if (!parleySelected.length) {
+    container.innerHTML = '<div class="text-muted" style="padding:12px;text-align:center">Marca picks en "Mis Picks" para armar un parley</div>';
+    document.getElementById('parley-total').textContent = '';
+    return;
+  }
+
+  let totalDecimal = 1;
+  parleySelected.forEach(p => {
+    const dec = p.odds < 0 ? 1 + 100 / Math.abs(p.odds) : 1 + p.odds / 100;
+    totalDecimal *= dec;
+    const sideCls = p.side === 'Over' ? 'side-over' : 'side-under';
+    container.innerHTML += `
+      <div class="parley-item">
+        <span class="prop-side ${sideCls}" style="font-size:10px">${p.side}</span>
+        <span style="flex:1">${p.pitcher} O/U ${p.line} @ ${p.odds}</span>
+        <span class="parley-odds">x${dec.toFixed(2)}</span>
+        <button onclick="removeParleyMember('${p.key}')" style="background:none;border:none;color:#f85149;cursor:pointer;font-size:16px">&times;</button>
+      </div>
+    `;
+  });
+
+  // American odds
+  let americanOdds;
+  if (totalDecimal >= 2) {
+    americanOdds = '+' + Math.round((totalDecimal - 1) * 100);
+  } else {
+    americanOdds = Math.round(-100 / (totalDecimal - 1));
+  }
+
+  document.getElementById('parley-total').textContent = parleySelected.length + ' picks | Cuota: ' + americanOdds + ' (x' + totalDecimal.toFixed(2) + ')';
+}
+
+function removeParleyMember(key) {
+  parleySelected = parleySelected.filter(p => p.key !== key);
+  saveParleySelected();
+  updateParleyUI();
+  updateParleySidebar();
+  savePicks();
+  updatePickUI();
+}
+
+// ================================================================
+// PARLEY SIDEBAR (floating, always visible)
+// ================================================================
+let parleySidebarOpen = true;
+
+function toggleParleySidebar() {
+  parleySidebarOpen = !parleySidebarOpen;
+  document.getElementById('parley-sidebar').classList.toggle('collapsed', !parleySidebarOpen);
+  document.getElementById('parley-toggle').classList.toggle('collapsed', !parleySidebarOpen);
+  document.getElementById('parley-toggle').textContent = parleySidebarOpen ? 'Parley \u25b8' : 'Parley \u25c2';
+}
+
+function isInParleyByKey(pkey) {
+  return parleySelected.some(function(p) { return p.fullKey === pkey; });
+}
+
+function toggleParleyFromEdge(raw) {
+  const idx = parleySelected.findIndex(function(p) { return p.fullKey === raw; });
+  if (idx >= 0) {
+    parleySelected.splice(idx, 1);
+  } else {
+    parleySelected.push(makePickObj(raw));
+  }
+  saveParleySelected();
+  updateParleySidebar();
+  render();
+}
+
+function addAllEdgesToParley(gameName) {
+  if (!data) return;
+  const results = data.results || [];
+  results.forEach(function(r) {
+    var g = r.phases && r.phases.calendar && r.phases.calendar.game || r.game || 'Juego';
+    if (g !== gameName) return;
+    var pp = r.markets && r.markets.player_props || {};
+    var edges = pp.market_edges || [];
+    edges.forEach(function(e) {
+      var pkey = 'edge|' + g + '|' + e.pitcher + ' ' + e.side + ' ' + e.line + 'K|' + e.odds + '|' + e.ev_pct + '|' + e.edge_pct + '|' + (e.bookmaker || '');
+      if (!parleySelected.some(function(p) { return p.fullKey === pkey; })) {
+        parleySelected.push(makePickObj(pkey));
+      }
+    });
+  });
+  saveParleySelected();
+  updateParleySidebar();
+  render();
+}
+
+function updateParleySidebar() {
+  document.getElementById('parley-leg-count').textContent = parleySelected.length;
+  const container = document.getElementById('parley-sidebar-items');
+  container.innerHTML = '';
+
+  if (!parleySelected.length) {
+    container.innerHTML = '<div class="text-muted" style="font-size:12px;text-align:center;padding:20px 0">Agrega picks al parley desde los juegos</div>';
+    document.getElementById('parley-sidebar-total').textContent = '';
+    return;
+  }
+
+  let totalDecimal = 1;
+  var legCount = 0;
+  parleySelected.forEach(function(p) {
+    const dec = p.odds < 0 ? 1 + 100 / Math.abs(p.odds) : 1 + p.odds / 100;
+    totalDecimal *= dec;
+    var sideCls = 'side-over';
+    if (p.side === 'Under' || p.side === 'RL') sideCls = 'side-under';
+    else if (p.side === 'ML' || p.side === 'HR' || p.side === 'SIG') sideCls = 'side-over';
+    container.innerHTML += '<div class="parley-item">' +
+      '<span class="prop-side ' + sideCls + '" style="font-size:10px">' + (p.displayType || p.mtype) + '</span>' +
+      '<span style="flex:1;font-size:12px">' + p.label + '</span>' +
+      '<span style="font-size:11px;color:#8b949e">' + (p.odds ? p.odds : '') + '</span>' +
+      '<span class="parley-odds" style="font-size:12px">x' + dec.toFixed(2) + '</span>' +
+      '<button onclick="removeParleyMember(\'' + p.key.replace(/'/g, "\\'") + '\')" style="background:none;border:none;color:#f85149;cursor:pointer;font-size:14px">&times;</button>' +
+      '</div>';
+    legCount++;
+  });
+
+  let americanOdds;
+  if (totalDecimal >= 2) {
+    americanOdds = '+' + Math.round((totalDecimal - 1) * 100);
+  } else {
+    americanOdds = Math.round(-100 / (totalDecimal - 1));
+  }
+
+  document.getElementById('parley-sidebar-total').textContent =
+    legCount + ' legs | Cuota: ' + americanOdds + ' (x' + totalDecimal.toFixed(2) + ')';
+}
+
+function saveParleyFromSidebar() {
+  if (parleySelected.length < 2) {
+    alert('Selecciona al menos 2 picks para armar un parley.');
+    return;
+  }
+  // Skip picks without odds (signals, HR without odds) for cuota calc
+  let totalDecimal = 1;
+  var legsWithOdds = 0;
+  parleySelected.forEach(function(p) {
+    if (p.odds && p.odds !== 0) {
+      const dec = p.odds < 0 ? 1 + 100 / Math.abs(p.odds) : 1 + p.odds / 100;
+      totalDecimal *= dec;
+      legsWithOdds++;
+    }
+  });
+
+  var americanOdds = '?';
+  if (legsWithOdds >= 2 && totalDecimal >= 2) {
+    americanOdds = '+' + Math.round((totalDecimal - 1) * 100);
+  } else if (legsWithOdds >= 2) {
+    americanOdds = '' + Math.round(-100 / (totalDecimal - 1));
+  }
+
+  const parleyKey = 'parley_' + Date.now();
+  picks.push({
+    key: parleyKey,
+    fullKey: parleyKey,
+    pitcher: 'PARLEY (' + parleySelected.length + ' legs)',
+    side: 'Multi',
+    line: 0,
+    odds: americanOdds,
+    bookmaker: parleySelected.map(function(p) { return p.bookmaker; }).filter(function(v,i,a) { return a.indexOf(v)===i; }).join('/'),
+    ev_pct: null,
+    edge_pct: null,
+    game: parleySelected.map(function(p) { return p.game; }).filter(function(v,i,a) { return a.indexOf(v)===i; }).join(' | '),
+    result: 'pending',
+    date: new Date().toISOString().split('T')[0],
+    legs: parleySelected.map(function(p) { return Object.assign({}, p); }),
+    is_parley: true,
+    parley_odds: americanOdds,
+    parley_decimal: totalDecimal,
+  });
+
+  parleySelected = [];
+  saveParleySelected();
+  savePicks();
+  updateParleySidebar();
+  render();
+  alert('Parley guardado en Mis Picks! Cuota: ' + americanOdds);
+}
+
+function clearParleySidebar() {
+  parleySelected = [];
+  saveParleySelected();
+  updateParleySidebar();
+  updatePickUI();
+  render();
+}
+
+function clearParley() {
+  parleySelected = [];
+  saveParleySelected();
+  updateParleyUI();
+  updatePickUI();
+}
+
+function saveParley() {
+  if (parleySelected.length < 2) {
+    alert('Selecciona al menos 2 picks para armar un parley.');
+    return;
+  }
+  let totalDecimal = 1;
+  parleySelected.forEach(p => {
+    const dec = p.odds < 0 ? 1 + 100 / Math.abs(p.odds) : 1 + p.odds / 100;
+    totalDecimal *= dec;
+  });
+
+  const americanOdds = totalDecimal >= 2 ? '+' + Math.round((totalDecimal - 1) * 100) : Math.round(-100 / (totalDecimal - 1));
+
+  // Save parley as a single pick
+  const parleyKey = 'parley_' + Date.now();
+  picks.push({
+    key: parleyKey,
+    pitcher: 'PARLEY (' + parleySelected.length + ' legs)',
+    side: 'Multi',
+    line: 0,
+    odds: americanOdds,
+    bookmaker: parleySelected.map(p => p.bookmaker).filter((v,i,a) => a.indexOf(v)===i).join('/'),
+    ev_pct: null,
+    edge_pct: null,
+    game: parleySelected.map(p => p.game).filter((v,i,a) => a.indexOf(v)===i).join(' | '),
+    result: 'pending',
+    date: new Date().toISOString().split('T')[0],
+    legs: parleySelected.map(p => ({ ...p })),
+    is_parley: true,
+    parley_odds: americanOdds,
+    parley_decimal: totalDecimal,
+  });
+
+  parleySelected = [];
+  saveParleySelected();
+  savePicks();
+  alert('Parley guardado en Mis Picks! Cuota: ' + americanOdds);
+}
+
+// ================================================================
+// INIT
+// ================================================================
+render();
+</script>
+</body>
+</html>

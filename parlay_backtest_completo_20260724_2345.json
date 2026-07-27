@@ -1,0 +1,465 @@
+{
+  "total_days": 303,
+  "total_games": 3989,
+  "parlays": {
+    "RL_away_all": {
+      "desc": "RL+1.5 away (todos los juegos)",
+      "leg_wr": 0.657,
+      "2": {
+        "legs": 2,
+        "parlays_tested": 25878,
+        "won": 10847,
+        "wr_pct": 41.92,
+        "expected_wr": 43.16,
+        "days_with_hit": 298,
+        "days_pct": 98.3,
+        "days_per_hit": 1.0
+      },
+      "3": {
+        "legs": 3,
+        "parlays_tested": 51830,
+        "won": 13906,
+        "wr_pct": 26.83,
+        "expected_wr": 28.36,
+        "days_with_hit": 295,
+        "days_pct": 97.4,
+        "days_per_hit": 1.0
+      },
+      "4": {
+        "legs": 4,
+        "parlays_tested": 53690,
+        "won": 9346,
+        "wr_pct": 17.41,
+        "expected_wr": 18.63,
+        "days_with_hit": 286,
+        "days_pct": 94.4,
+        "days_per_hit": 1.1
+      },
+      "5": {
+        "legs": 5,
+        "parlays_tested": 53381,
+        "won": 5992,
+        "wr_pct": 11.22,
+        "expected_wr": 12.24,
+        "days_with_hit": 266,
+        "days_pct": 87.8,
+        "days_per_hit": 1.1
+      },
+      "6": {
+        "legs": 6,
+        "parlays_tested": 52353,
+        "won": 3694,
+        "wr_pct": 7.06,
+        "expected_wr": 8.04,
+        "days_with_hit": 220,
+        "days_pct": 72.6,
+        "days_per_hit": 1.4
+      },
+      "7": {
+        "legs": 7,
+        "parlays_tested": 50525,
+        "won": 2374,
+        "wr_pct": 4.7,
+        "expected_wr": 5.28,
+        "days_with_hit": 178,
+        "days_pct": 58.7,
+        "days_per_hit": 1.7
+      },
+      "8": {
+        "legs": 8,
+        "parlays_tested": 48953,
+        "won": 1435,
+        "wr_pct": 2.93,
+        "expected_wr": 3.47,
+        "days_with_hit": 129,
+        "days_pct": 42.6,
+        "days_per_hit": 2.3
+      },
+      "10": {
+        "legs": 10,
+        "parlays_tested": 46161,
+        "won": 541,
+        "wr_pct": 1.17,
+        "expected_wr": 1.5,
+        "days_with_hit": 66,
+        "days_pct": 21.8,
+        "days_per_hit": 4.6
+      }
+    },
+    "RL_home_best3": {
+      "desc": "RL+1.5 home (top 3 por total mas bajo)",
+      "leg_wr": 0.701,
+      "2": {
+        "legs": 2,
+        "parlays_tested": 897,
+        "won": 428,
+        "wr_pct": 47.71,
+        "expected_wr": 49.14,
+        "days_with_hit": 232,
+        "days_pct": 76.6,
+        "days_per_hit": 1.3
+      },
+      "3": {
+        "legs": 3,
+        "parlays_tested": 299,
+        "won": 98,
+        "wr_pct": 32.78,
+        "expected_wr": 34.45,
+        "days_with_hit": 98,
+        "days_pct": 32.3,
+        "days_per_hit": 3.1
+      }
+    },
+    "Mixed_RL_ML": {
+      "desc": "Mixto: 2 RL away + 1 ML favorito",
+      "leg_wr": 0.6513333333333334,
+      "2": {
+        "legs": 2,
+        "parlays_tested": 897,
+        "won": 394,
+        "wr_pct": 43.92,
+        "expected_wr": 42.42,
+        "days_with_hit": 216,
+        "days_pct": 71.3,
+        "days_per_hit": 1.4
+      },
+      "3": {
+        "legs": 3,
+        "parlays_tested": 299,
+        "won": 89,
+        "wr_pct": 29.77,
+        "expected_wr": 27.63,
+        "days_with_hit": 89,
+        "days_pct": 29.4,
+        "days_per_hit": 3.4
+      }
+    }
+  },
+  "teorico": {
+    "parlay_1pct": {
+      "target_wr": 1,
+      "2": 10.0,
+      "3": 21.5,
+      "4": 31.6,
+      "5": 39.8,
+      "6": 46.4,
+      "7": 51.8,
+      "8": 56.2,
+      "10": 63.1
+    },
+    "parlay_5pct": {
+      "target_wr": 5,
+      "2": 22.4,
+      "3": 36.8,
+      "4": 47.3,
+      "5": 54.9,
+      "6": 60.7,
+      "7": 65.2,
+      "8": 68.8,
+      "10": 74.1
+    },
+    "parlay_10pct": {
+      "target_wr": 10,
+      "2": 31.6,
+      "3": 46.4,
+      "4": 56.2,
+      "5": 63.1,
+      "6": 68.1,
+      "7": 72.0,
+      "8": 75.0,
+      "10": 79.4
+    },
+    "parlay_15pct": {
+      "target_wr": 15,
+      "2": 38.7,
+      "3": 53.1,
+      "4": 62.2,
+      "5": 68.4,
+      "6": 72.9,
+      "7": 76.3,
+      "8": 78.9,
+      "10": 82.7
+    },
+    "parlay_20pct": {
+      "target_wr": 20,
+      "2": 44.7,
+      "3": 58.5,
+      "4": 66.9,
+      "5": 72.5,
+      "6": 76.5,
+      "7": 79.5,
+      "8": 81.8,
+      "10": 85.1
+    },
+    "parlay_25pct": {
+      "target_wr": 25,
+      "2": 50.0,
+      "3": 63.0,
+      "4": 70.7,
+      "5": 75.8,
+      "6": 79.4,
+      "7": 82.0,
+      "8": 84.1,
+      "10": 87.1
+    },
+    "parlay_30pct": {
+      "target_wr": 30,
+      "2": 54.8,
+      "3": 66.9,
+      "4": 74.0,
+      "5": 78.6,
+      "6": 81.8,
+      "7": 84.2,
+      "8": 86.0,
+      "10": 88.7
+    },
+    "parlay_40pct": {
+      "target_wr": 40,
+      "2": 63.2,
+      "3": 73.7,
+      "4": 79.5,
+      "5": 83.3,
+      "6": 85.8,
+      "7": 87.7,
+      "8": 89.2,
+      "10": 91.2
+    },
+    "parlay_50pct": {
+      "target_wr": 50,
+      "2": 70.7,
+      "3": 79.4,
+      "4": 84.1,
+      "5": 87.1,
+      "6": 89.1,
+      "7": 90.6,
+      "8": 91.7,
+      "10": 93.3
+    }
+  },
+  "simulacion_diaria": {
+    "6_best_RL": {
+      "desc": "6 mejores RL+1.5/dia",
+      "entries_per_day": 6,
+      "avg_leg_wr": 65.7,
+      "2": {
+        "legs": 2,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.0,
+        "median_days_to_first_hit": 1.0
+      },
+      "3": {
+        "legs": 3,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.1,
+        "median_days_to_first_hit": 1.0
+      },
+      "4": {
+        "legs": 4,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.5,
+        "median_days_to_first_hit": 1.0
+      },
+      "5": {
+        "legs": 5,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 2.9,
+        "median_days_to_first_hit": 2.0
+      },
+      "6": {
+        "legs": 6,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 12.1,
+        "median_days_to_first_hit": 9.0
+      },
+      "7": {
+        "legs": 7,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      },
+      "8": {
+        "legs": 8,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      },
+      "10": {
+        "legs": 10,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      }
+    },
+    "8_best_RL": {
+      "desc": "8 mejores RL+1.5/dia",
+      "entries_per_day": 8,
+      "avg_leg_wr": 65.7,
+      "2": {
+        "legs": 2,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.0,
+        "median_days_to_first_hit": 1.0
+      },
+      "3": {
+        "legs": 3,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.0,
+        "median_days_to_first_hit": 1.0
+      },
+      "4": {
+        "legs": 4,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.1,
+        "median_days_to_first_hit": 1.0
+      },
+      "5": {
+        "legs": 5,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.4,
+        "median_days_to_first_hit": 1.0
+      },
+      "6": {
+        "legs": 6,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 2.2,
+        "median_days_to_first_hit": 2.0
+      },
+      "7": {
+        "legs": 7,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 5.5,
+        "median_days_to_first_hit": 4.0
+      },
+      "8": {
+        "legs": 8,
+        "pct_seasons_with_hit": 99.9,
+        "avg_days_to_first_hit": 28.8,
+        "median_days_to_first_hit": 20.0
+      },
+      "10": {
+        "legs": 10,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      }
+    },
+    "4_RL_2_ML": {
+      "desc": "4 RL + 2 ML/dia",
+      "entries_per_day": 6,
+      "avg_leg_wr": 65.1,
+      "2": {
+        "legs": 2,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.0,
+        "median_days_to_first_hit": 1.0
+      },
+      "3": {
+        "legs": 3,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.1,
+        "median_days_to_first_hit": 1.0
+      },
+      "4": {
+        "legs": 4,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.5,
+        "median_days_to_first_hit": 1.0
+      },
+      "5": {
+        "legs": 5,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 3.0,
+        "median_days_to_first_hit": 2.0
+      },
+      "6": {
+        "legs": 6,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 13.0,
+        "median_days_to_first_hit": 9.0
+      },
+      "7": {
+        "legs": 7,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      },
+      "8": {
+        "legs": 8,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      },
+      "10": {
+        "legs": 10,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      }
+    },
+    "6_mixto": {
+      "desc": "3 RL + 2 ML + 1 Total/dia",
+      "entries_per_day": 6,
+      "avg_leg_wr": 63.4,
+      "2": {
+        "legs": 2,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.0,
+        "median_days_to_first_hit": 1.0
+      },
+      "3": {
+        "legs": 3,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.2,
+        "median_days_to_first_hit": 1.0
+      },
+      "4": {
+        "legs": 4,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 1.7,
+        "median_days_to_first_hit": 1.0
+      },
+      "5": {
+        "legs": 5,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 3.5,
+        "median_days_to_first_hit": 3.0
+      },
+      "6": {
+        "legs": 6,
+        "pct_seasons_with_hit": 100.0,
+        "avg_days_to_first_hit": 15.0,
+        "median_days_to_first_hit": 11.0
+      },
+      "7": {
+        "legs": 7,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      },
+      "8": {
+        "legs": 8,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      },
+      "10": {
+        "legs": 10,
+        "pct_seasons_with_hit": 0.0,
+        "avg_days_to_first_hit": "N/A",
+        "median_days_to_first_hit": "N/A"
+      }
+    }
+  },
+  "wr_data": {
+    "RL_away_all": 0.657,
+    "RL_home_all": 0.701,
+    "RL_juego_cerrado": 0.649,
+    "RL_juego_cerrado_rd3": 0.732,
+    "RL_juego_cerrado_rd2": 0.791,
+    "ML_fav": 0.64,
+    "ML_ud": 0.43,
+    "ML_hist": 0.55,
+    "Total_under": 0.55,
+    "Total_over": 0.5
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-07-23T08:03:19.302388",
+  "total_games": 3970,
+  "filtered_games": 2397,
+  "recommendation": "Filter total <= 8.5 + RD <= 3 for 3-leg parlays",
+  "strategies": {
+    "all_games": {
+      "parlays": 11308,
+      "won": 543,
+      "wr": 4.8,
+      "roi": -66.6
+    },
+    "total_le_85": {
+      "parlays": 9174,
+      "won": 423,
+      "wr": 4.6,
+      "roi": -67.9
+    },
+    "total_le_8": {
+      "parlays": 9174,
+      "won": 422,
+      "wr": 4.6,
+      "roi": -68.0
+    },
+    "total_le_75": {
+      "parlays": 6795,
+      "won": 493,
+      "wr": 7.3,
+      "roi": -49.5
+    },
+    "total_7_9": {
+      "parlays": 2146,
+      "won": 121,
+      "wr": 5.6,
+      "roi": -60.8
+    },
+    "close_rd3": {
+      "parlays": 6472,
+      "won": 924,
+      "wr": 14.3,
+      "roi": -0.7
+    },
+    "close_rd2": {
+      "parlays": 3534,
+      "won": 1059,
+      "wr": 30.0,
+      "roi": 108.5
+    },
+    "strict": {
+      "parlays": 4497,
+      "won": 561,
+      "wr": 12.5,
+      "roi": -13.2
+    },
+    "super_strict": {
+      "parlays": 2481,
+      "won": 594,
+      "wr": 23.9,
+      "roi": 66.6
+    }
+  }
+}

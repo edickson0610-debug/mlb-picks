@@ -1,0 +1,139 @@
+{
+  "timestamp": "2026-07-25T00:02:58.554829",
+  "sesgo": {
+    "config": {
+      "nombre": "ML con sesgo (favoritos)",
+      "desc": "Prob modelo >= 60%, solo favoritos, max 85%",
+      "umbral_min": 0.6,
+      "umbral_max": 0.85,
+      "usa_sesgo": true
+    },
+    "total_entries": 3989,
+    "win_rate": 64.3,
+    "roi": 22.8,
+    "by_market": {
+      "RL+1.5": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      }
+    },
+    "by_tipo": {
+      "rl": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      }
+    },
+    "parlays": {
+      "2": {
+        "total": 24558,
+        "won": 10099,
+        "wr": 41.1
+      },
+      "3": {
+        "total": 27590,
+        "won": 7142,
+        "wr": 25.9
+      },
+      "4": {
+        "total": 27926,
+        "won": 4571,
+        "wr": 16.4
+      },
+      "5": {
+        "total": 27617,
+        "won": 2838,
+        "wr": 10.3
+      },
+      "6": {
+        "total": 26953,
+        "won": 1638,
+        "wr": 6.1
+      },
+      "7": {
+        "total": 26005,
+        "won": 1032,
+        "wr": 4.0
+      },
+      "8": {
+        "total": 24933,
+        "won": 598,
+        "wr": 2.4
+      },
+      "10": {
+        "total": 23361,
+        "won": 207,
+        "wr": 0.9
+      }
+    }
+  },
+  "pura": {
+    "config": {
+      "nombre": "ML puro matematico",
+      "desc": "Prob modelo >= 55%, cualquier lado, sin limites",
+      "umbral_min": 0.55,
+      "umbral_max": 0.95,
+      "usa_sesgo": false
+    },
+    "total_entries": 3989,
+    "win_rate": 64.3,
+    "roi": 22.8,
+    "by_market": {
+      "RL+1.5": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      }
+    },
+    "by_tipo": {
+      "rl": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      }
+    },
+    "parlays": {
+      "2": {
+        "total": 24558,
+        "won": 10107,
+        "wr": 41.2
+      },
+      "3": {
+        "total": 27590,
+        "won": 7190,
+        "wr": 26.1
+      },
+      "4": {
+        "total": 27926,
+        "won": 4640,
+        "wr": 16.6
+      },
+      "5": {
+        "total": 27617,
+        "won": 2818,
+        "wr": 10.2
+      },
+      "6": {
+        "total": 26953,
+        "won": 1648,
+        "wr": 6.1
+      },
+      "7": {
+        "total": 26005,
+        "won": 973,
+        "wr": 3.7
+      },
+      "8": {
+        "total": 24933,
+        "won": 609,
+        "wr": 2.4
+      },
+      "10": {
+        "total": 23361,
+        "won": 223,
+        "wr": 1.0
+      }
+    }
+  }
+}

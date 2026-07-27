@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-07-25T00:06:43.447681",
+  "sesgo": {
+    "config": {
+      "nombre": "ML con sesgo (favoritos)",
+      "desc": "Prob modelo >= 60%, solo favoritos, max 85%",
+      "umbral_min": 0.6,
+      "umbral_max": 0.85,
+      "usa_sesgo": true
+    },
+    "total_entries": 5347,
+    "win_rate": 73.4,
+    "roi": 40.1,
+    "by_market": {
+      "RL+1.5": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      },
+      "ML": {
+        "total": 1358,
+        "won": 1358,
+        "wr": 100.0
+      }
+    },
+    "by_tipo": {
+      "rl": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      },
+      "favorito": {
+        "total": 1358,
+        "won": 1358,
+        "wr": 100.0
+      }
+    },
+    "parlays": {
+      "2": {
+        "total": 27209,
+        "won": 14571,
+        "wr": 53.6
+      },
+      "3": {
+        "total": 28683,
+        "won": 11090,
+        "wr": 38.7
+      },
+      "4": {
+        "total": 28811,
+        "won": 7996,
+        "wr": 27.8
+      },
+      "5": {
+        "total": 28660,
+        "won": 5588,
+        "wr": 19.5
+      },
+      "6": {
+        "total": 28367,
+        "won": 3896,
+        "wr": 13.7
+      },
+      "7": {
+        "total": 27959,
+        "won": 2613,
+        "wr": 9.3
+      },
+      "8": {
+        "total": 27484,
+        "won": 1658,
+        "wr": 6.0
+      },
+      "10": {
+        "total": 26446,
+        "won": 685,
+        "wr": 2.6
+      }
+    }
+  },
+  "pura": {
+    "config": {
+      "nombre": "ML puro matematico",
+      "desc": "Prob modelo >= 55%, cualquier lado, sin limites",
+      "umbral_min": 0.55,
+      "umbral_max": 0.95,
+      "usa_sesgo": false
+    },
+    "total_entries": 6285,
+    "win_rate": 77.3,
+    "roi": 47.6,
+    "by_market": {
+      "ML": {
+        "total": 2296,
+        "won": 2296,
+        "wr": 100.0
+      },
+      "RL+1.5": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      }
+    },
+    "by_tipo": {
+      "favorito": {
+        "total": 2296,
+        "won": 2296,
+        "wr": 100.0
+      },
+      "rl": {
+        "total": 3989,
+        "won": 2565,
+        "wr": 64.3
+      }
+    },
+    "parlays": {
+      "2": {
+        "total": 28147,
+        "won": 16801,
+        "wr": 59.7
+      },
+      "3": {
+        "total": 29283,
+        "won": 13456,
+        "wr": 46.0
+      },
+      "4": {
+        "total": 29371,
+        "won": 10413,
+        "wr": 35.5
+      },
+      "5": {
+        "total": 29297,
+        "won": 7688,
+        "wr": 26.2
+      },
+      "6": {
+        "total": 29128,
+        "won": 5721,
+        "wr": 19.6
+      },
+      "7": {
+        "total": 28869,
+        "won": 4014,
+        "wr": 13.9
+      },
+      "8": {
+        "total": 28464,
+        "won": 2890,
+        "wr": 10.2
+      },
+      "10": {
+        "total": 27590,
+        "won": 1414,
+        "wr": 5.1
+      }
+    }
+  }
+}
