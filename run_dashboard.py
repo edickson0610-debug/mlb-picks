@@ -132,9 +132,11 @@ def generate_auto_parleys(results):
         protocol_score = r.get("score", 0)
 
         # ================================================================
-        # 1. RUNLINE +1.5 - Primary parley leg (backtest: 80% WR)
+        # 1. RUNLINE +1.5 - Primary parley leg (fallback: ML si RL no disponible)
         # ================================================================
         rl = markets.get("runline_plus_1_5", {})
+        ml = markets.get("money_line", {})
+        rl_used = False
         if rl.get("decision") == "APROBADO":
             rl_ev = _parse_ev(rl.get("ev"))
             underdog = rl.get("side") or _underdog_team(game, markets)
@@ -154,6 +156,7 @@ def generate_auto_parleys(results):
                     "type": "rl",
                     "protocol_score": protocol_score,
                 })
+                rl_used = True
 
         # ================================================================
         # 2. TOTALES - Over/Under
@@ -180,18 +183,17 @@ def generate_auto_parleys(results):
                 })
 
         # ================================================================
-        # 3. MONEY LINE - Sin sesgo, usa el side del modelo
+        # 3. MONEY LINE - Fallback cuando RL +1.5 no esta disponible
         # ================================================================
-        ml = markets.get("money_line", {})
         ml_ev = _parse_ev(ml.get("ev"))
         fair_odds = ml.get("fair_odds", 0) or 0
-        if ml.get("decision") == "APROBADO":
+        if not rl_used and ml.get("decision") == "APROBADO":
             ml_side = ml.get("side") or _underdog_team(game, markets)
             odds_dec = decimal_odds(fair_odds)
             win_prob = ml.get("win_pct", 0) or 0.5
             all_legs.append({
                 "game": game,
-                "label": f"{ml_side} ML",
+                "label": f"{ml_side} ML ({fair_odds:+d})",
                 "odds": fair_odds,
                 "odds_decimal": round(odds_dec, 2),
                 "ev_pct": ml_ev if ml_ev > 0 else 5.0,
