@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: mlb-picks
+    runtime: python
+    plan: free
+    buildCommand: pip install flask requests gunicorn
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: GITHUB_TOKEN
+        sync: false

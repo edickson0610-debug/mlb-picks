@@ -27,11 +27,9 @@ dist/
 build/
 templates/
 Procfile
-render.yaml
 dashboard_data.js
 
 # Old / unused scripts
-app.py
 backtest*.py
 daily_selector_v7.py
 explore_props.py
